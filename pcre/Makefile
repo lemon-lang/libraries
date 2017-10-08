@@ -1,7 +1,6 @@
 CFLAGS += -O3 -g -c -fPIC -I../../lemon/src
 
-LDFLAGS += -shared -L../../lemon -llemon
-LDFLAGS += -lpcre
+LDFLAGS += -shared -rdynamic -L../../lemon -llemon
 
 SRCS  = pcre.c
 
@@ -11,8 +10,7 @@ INCS := $(wildcard *.h)
 all: pcre.so
 
 pcre.so: $(OBJS) $(INCS) Makefile
-	cc $(LDFLAGS) $(OBJS) -o $@
-
+	$(CC) $(LDFLAGS) $(OBJS) -lpcre -o $@
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@

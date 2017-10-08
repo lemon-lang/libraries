@@ -1,8 +1,7 @@
 CFLAGS += -O3 -g -c -fPIC -I../../lemon/src
 CFLAGS += `mysql_config --cflags`
 
-LDFLAGS += -shared -L../../lemon -llemon
-LDFLAGS += `mysql_config --libs`
+LDFLAGS += -shared -rdynamic -L../../lemon -llemon
 
 SRCS  = mysql.c
 SRCS += cursor.c
@@ -14,8 +13,7 @@ INCS := $(wildcard *.h)
 all: mysql.so
 
 mysql.so: $(OBJS) $(INCS) Makefile
-	cc $(LDFLAGS) $(OBJS) -o $@
-
+	$(CC) $(LDFLAGS) $(OBJS) `mysql_config --libs` -o $@
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
